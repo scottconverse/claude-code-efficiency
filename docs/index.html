@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>claude-code-efficiency — a Claude Code skill for long, expensive sessions</title>
+  <meta name="description" content="Teaches Claude Code to reduce token burn in long sessions — without installing shell-alias rewriters, analytics, or hidden hooks.">
+  <style>
+    :root {
+      --fg: #1a1a1a;
+      --fg-muted: #555;
+      --bg: #fafaf7;
+      --accent: #c44d26;
+      --border: #e2e2dc;
+      --code-bg: #f0efea;
+      --warning-bg: #fef6f3;
+      --max-width: 720px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      color: var(--fg);
+      background: var(--bg);
+      margin: 0;
+      line-height: 1.6;
+      font-size: 17px;
+    }
+    main {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 48px 24px 64px;
+    }
+    header { margin-bottom: 48px; }
+    h1 {
+      font-size: 2.4rem;
+      margin: 0 0 12px;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+    h2 {
+      font-size: 1.4rem;
+      margin: 48px 0 16px;
+      letter-spacing: -0.01em;
+    }
+    h3 {
+      font-size: 1.1rem;
+      margin: 32px 0 8px;
+    }
+    p { margin: 12px 0; }
+    .tagline {
+      color: var(--fg-muted);
+      font-size: 1.1rem;
+      margin-bottom: 24px;
+    }
+    .cta {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 500;
+      margin: 4px 4px 4px 0;
+    }
+    .cta:focus { outline: 2px solid var(--fg); outline-offset: 2px; }
+    .cta.secondary {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+    pre, code {
+      font-family: "SF Mono", Monaco, Consolas, "Courier New", monospace;
+      font-size: 0.92rem;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 16px;
+      border-radius: 4px;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+    }
+    code {
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    pre code {
+      background: transparent;
+      padding: 0;
+    }
+    ul { padding-left: 24px; }
+    li { margin: 6px 0; }
+    .priorities {
+      list-style: none;
+      padding: 0;
+      counter-reset: priority;
+    }
+    .priorities li {
+      counter-increment: priority;
+      padding: 14px 0 14px 48px;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+    .priorities li:last-child { border-bottom: none; }
+    .priorities li:before {
+      content: counter(priority);
+      position: absolute;
+      left: 0;
+      top: 16px;
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    .anti-patterns {
+      background: var(--warning-bg);
+      border-left: 3px solid var(--accent);
+      padding: 16px 20px;
+      margin: 24px 0;
+      border-radius: 2px;
+    }
+    .anti-patterns h3 { margin-top: 0; }
+    footer {
+      margin-top: 80px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--fg-muted);
+      font-size: 0.9rem;
+    }
+    footer a { color: var(--fg-muted); }
+    a { color: var(--accent); }
+    a:hover { text-decoration: underline; }
+    @media (max-width: 600px) {
+      h1 { font-size: 1.9rem; }
+      h2 { font-size: 1.25rem; }
+      main { padding: 32px 20px 48px; }
+      .cta { display: block; margin: 8px 0; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>claude-code-efficiency</h1>
+    <p class="tagline">A Claude Code skill for long, expensive sessions — without shell-alias rewriters, analytics, or hidden hooks.</p>
+    <a class="cta" href="https://github.com/scottconverse/claude-code-efficiency">View on GitHub</a>
+    <a class="cta secondary" href="#install">Install</a>
+  </header>
+
+  <section>
+    <h2>What it does</h2>
+    <p>When your Claude Code session gets long or expensive, this skill loads a structured set of practices that actually reduce token spend — ranked by leverage, with evidence-based recommendations only.</p>
+    <ul class="priorities">
+      <li>Route large tool output through MCP sandboxes or subagents — keep raw data out of the main context window</li>
+      <li>Use <code>Grep</code>-shape + targeted <code>Read</code> instead of full-file reads (native AST skeletonization, zero install footprint)</li>
+      <li>Match permission modes to blast radius — auto-approve only in sandboxes, never over uncommitted work</li>
+      <li>Scope allowlists correctly — project for writes, global only for universal reads</li>
+      <li>Tune effort to problem depth, not to ceremony</li>
+      <li>Clean long sessions with <code>/clear</code>, <code>/compact</code>, and chapter marks</li>
+      <li>Prompt with coordinates, not descriptions — files over inline output</li>
+      <li>Move recurring reminders to <code>CLAUDE.md</code> and harness hooks, not every-turn nudges</li>
+    </ul>
+  </section>
+
+  <section id="install">
+    <h2>Install</h2>
+    <pre><code>cd ~/.claude/skills
+git clone https://github.com/scottconverse/claude-code-efficiency.git</code></pre>
+    <p>Start a new Claude Code session. The skill auto-triggers on phrases like "save tokens," "reduce context," or "be concise" — or invoke it directly via the <code>Skill</code> tool.</p>
+  </section>
+
+  <section>
+    <h2>How it's built</h2>
+    <p>A single markdown file (<code>SKILL.md</code>) with YAML frontmatter and eight priority sections. No binary. No network access. No dependencies beyond Claude Code itself. Structural tests live in <code>tests/</code> and verify frontmatter parses, trigger words are present, and forbidden patterns are absent.</p>
+  </section>
+
+  <section>
+    <div class="anti-patterns">
+      <h3>Explicitly rejected patterns</h3>
+      <p>This skill does <em>not</em> recommend:</p>
+      <ul>
+        <li>Global shell aliases that rewrite <code>git</code> / <code>npm</code> / <code>cargo</code> output</li>
+        <li>Analytics, telemetry, or phone-home behavior in dev tooling</li>
+        <li><code>--no-verify</code> and other hook bypasses</li>
+        <li><code>test.skip()</code> and equivalents — skipped tests are lies</li>
+        <li>Marketing "X% savings" numbers without reproducible methodology</li>
+        <li>Trust-by-credential-association ("the guy who built X said so")</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Links</h2>
+    <ul>
+      <li><a href="https://github.com/scottconverse/claude-code-efficiency/blob/main/README.md">README</a></li>
+      <li><a href="https://github.com/scottconverse/claude-code-efficiency/blob/main/USER-MANUAL.md">User Manual</a> (plain-language, for non-technical users)</li>
+      <li><a href="https://github.com/scottconverse/claude-code-efficiency/blob/main/CHANGELOG.md">Changelog</a></li>
+      <li><a href="https://github.com/scottconverse/claude-code-efficiency/blob/main/CONTRIBUTING.md">Contributing</a></li>
+      <li><a href="https://github.com/scottconverse/claude-code-efficiency/blob/main/SKILL.md">SKILL.md</a> (the skill itself)</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>MIT License. No analytics on this page. No tracking scripts. <a href="https://github.com/scottconverse/claude-code-efficiency/blob/main/docs/index.html">View source</a>.</p>
+  </footer>
+</main>
+</body>
+</html>
